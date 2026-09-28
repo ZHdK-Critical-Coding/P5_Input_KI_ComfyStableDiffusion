@@ -15,19 +15,22 @@ erreichbar ist (meist im lokalen Netz, mit GPU). Der Workflow
 `SD1.5/v1-5-pruned-emaonly.ckpt` und den Node **SaveImageWebsocket** (in
 ComfyUI enthalten).
 
-1. Die Adresse des ComfyUI-Servers in der Konstante `instance` oben in
-   `sketch.js` eintragen (Standard `http://192.168.2.8:8188`).
-2. Den Ordner in Visual Studio Code öffnen und Live Server starten (in der
-   Statusleiste auf **Go Live** klicken).
-3. Der Browser greift Cross-Origin auf ComfyUI zu. Entweder ComfyUI mit
-   `--enable-cors-header` starten oder die Debugger-Konfiguration
-   **Launch Chrome (no Security)** verwenden (Panel Run and Debug).
-4. Den Prompt im Textfeld anpassen und auf **generate** klicken. Während
-   das Bild generiert wird, pulsiert ein roter Punkt.
+Die Adresse des ComfyUI-Servers in der Konstante `instance` oben in
+`sketch.js` eintragen (Standard `http://192.168.2.8:8188`).
 
 Bibliotheken (in `libraries/`): p5.js 1.10.0, p5.sound 1.0.1 (eingebunden,
 nicht verwendet), [p5.comfyui-helper](https://github.com/gohai/p5.comfyui-helper)
 von Gottfried Haider.
+
+## Ausführen
+
+1. Den Ordner in Visual Studio Code öffnen und Live Server starten (in der
+   Statusleiste auf **Go Live** klicken).
+2. Der Browser greift Cross-Origin auf ComfyUI zu. Entweder ComfyUI mit
+   `--enable-cors-header` starten oder die Debugger-Konfiguration
+   **Launch Chrome (no Security)** verwenden (Panel Run and Debug).
+3. Den Prompt im Textfeld anpassen und auf **generate** klicken. Während
+   das Bild generiert wird, pulsiert ein roter Punkt.
 
 ## Coding-Hilfe
 
@@ -41,7 +44,10 @@ von Gottfried Haider.
   **generate**.
 - **`requestImage()`**: schreibt einen zufälligen Seed in den
   KSampler-Node `3` und den Prompt in Node `6` (positiver Prompt) und ruft
-  dann `comfy.run(workflow, gotImage)` auf. Der negative Prompt steht in
+  dann `await comfy.run(workflow, gotImage)` auf. Schlägt die Anfrage fehl
+  (z. B. Server nicht erreichbar), zeigt ein Alert den Fehler und `running`
+  wird zurückgesetzt, sodass man es erneut versuchen kann. Der negative
+  Prompt steht in
   Node `7`, die Bildgrösse (512 × 512) in Node `5`. Bei einem eigenen
   Workflow die Node-Nummern anpassen.
 - **`libraries/p5.comfyui-helper.js`**: ersetzt `SaveImage` durch
